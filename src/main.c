@@ -10,6 +10,7 @@
 #include "../include/file.h"
 
 char* filename = "test.txt";
+bool dirty = false;
 
 void local_test(char ch) {
     clear();
@@ -23,7 +24,7 @@ void init_project() {
     noecho();
     curs_set(0);
     init(filename);
-    print_buffer(false);
+    print_buffer(false, filename, dirty);
     refresh();
 }
 
@@ -47,35 +48,42 @@ int main(int argc, char* argv[]) {
             } else {
                 test_mode = true;
             }
-            print_buffer(test_mode);
+            print_buffer(test_mode, filename, dirty);
 
 
         }
         else if (ch == CTRL_S) {
             save_file(filename);
+            dirty = false;
+            print_buffer(test_mode, filename, dirty);
         }
         else {
-            if (ch == KEY_BACKSPACE) {
-                rem_char();
+            switch (ch) {
+                // NAVIGATION
+                case KEY_LEFT:
+                    mov_pos_left();
+                    break;
+                case KEY_RIGHT:
+                    mov_pos_right();
+                    break;
+                case KEY_UP:
+                    mov_pos_up();
+                    break;
+                case KEY_DOWN:
+                    mov_pos_down();
+                    break;
+
+                //CHANGES
+                case KEY_BACKSPACE:
+                    rem_char();
+                    dirty = true;
+                    break;
+                default:
+                    add_char(ch);
+                    dirty = true;
+                    break;
             }
-            else if (ch == KEY_LEFT) {
-                mov_pos_left();
-            }
-            else if (ch == KEY_RIGHT) {
-                mov_pos_right();
-            }
-            else if (ch == KEY_UP) {
-                mov_pos_up();
-            }
-            else if (ch == KEY_DOWN) {
-                mov_pos_down();
-            }
-            else {
-                // local_test(ch);
-                add_char(ch);
-            }
-            print_buffer(test_mode);
-            
+            print_buffer(test_mode, filename, dirty);
             refresh();
         }
     }

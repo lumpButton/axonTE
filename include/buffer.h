@@ -11,6 +11,8 @@ typedef struct {
     int amount_lines;
     int current_line;
     int current_pos;
+    int current_y_offset;
+    int current_y;
 } Buffer;
 Line* create_line();
 void init_buffer();
@@ -26,3 +28,5 @@ void mov_pos_left();
 void mov_pos_right();
 void mov_pos_up();
 void mov_pos_down();
+int get_current_y_offset();
+int get_current_y();

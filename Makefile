@@ -24,5 +24,7 @@ install: $(BIN)
 uninstall:
 	sudo rm -f /usr/local/bin/axonTE
 
-.PHONY: all clean install uninstall
+make_install: $(BIN) install
+
+.PHONY: all clean install uninstall make_install
 
